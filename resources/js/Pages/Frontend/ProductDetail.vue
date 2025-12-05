@@ -1,6 +1,7 @@
 <script setup>
-import { useForm, router, Head, Link } from "@inertiajs/vue3";
-import { ref, computed, watch } from "vue";
+import { useForm, router, Link } from "@inertiajs/vue3";
+import { useHead } from "@vueuse/head";
+import { ref, computed } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Gallary from "@/Components/Gallary.vue";
 
@@ -21,6 +22,7 @@ import SeoHead from "@/Components/SeoHead.vue";
 
 const props = defineProps({
   product: Object,
+  jsonLd: Object,
   errors: Array,
   ProductAverageRating: Number,
   relatedProducts: Array,
@@ -99,10 +101,56 @@ const addToCart = (product) => {
 const isInCart = computed(() => {
   return store.cart.find((item) => item.id === props.product?.id)?.quantity;
 });
+
+if (props.jsonLd) {
+  useHead({
+    script: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org/",
+          "@type": "Product",
+          name: props.product.title,
+          image: "https://bttexaccess.com/",
+          description: props.product.description,
+          sku: props.product.sku || props.product.id,
+          brand: {
+            "@type": "Brand",
+            name: props.product?.brand?.name || "BTTex Access",
+          },
+          offers: {
+            "@type": "Offer",
+            url: `https://bttexaccess.com/product/${props.product.slug}`,
+            priceCurrency: "BDT",
+            price:
+              props.product.discount > 0
+                ? props.product.discount
+                : props.product.price,
+            availability: props.product.in_stock
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+          },
+          aggregateRating: props.product.rating_count
+            ? {
+                "@type": "AggregateRating",
+                ratingValue: props.product.rating_avg || 0,
+                reviewCount: props.product.rating_count || 0,
+              }
+            : undefined,
+        }),
+      },
+    ],
+  });
+}
 </script>
 
 <template>
-  <SeoHead :product="product" />
+  <SeoHead
+    :title="product?.title"
+    :description="product.metadescription"
+    :keywords="product.metakeyword"
+    :url="product.canonicalurl"
+  />
 
   <AppLayout>
     <div class="container py-lg-8">

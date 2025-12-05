@@ -1,4 +1,3 @@
-// Base Imports
 import "./bootstrap.js";
 import "../css/app.css";
 import "summernote/dist/summernote-lite.css";
@@ -7,19 +6,17 @@ import "vue-select/dist/vue-select.css";
 import "vue-image-zoomer/dist/style.css";
 import "./assets/css/main.css";
 
-// Setting Provider
 import { settingProvider } from "@/plugins/settingProvider.js";
 const setting = settingProvider();
 
-// Pinia, Vue, Inertia
 import { createPinia } from "pinia";
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
+import { createHead } from "@vueuse/head"; // 1 import
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-
-// Components & Plugins
 import vSelect from "vue-select";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+
 import { createVbPlugin } from "vue3-plugin-bootstrap5";
 import {
   Alert,
@@ -35,9 +32,7 @@ import {
   Toast,
   Tooltip,
 } from "bootstrap";
-
-// Bootstrap5 Plugin
-const vbPlugin = createVbPlugin({
+let vbPlugin = createVbPlugin({
   Alert,
   Button,
   Carousel,
@@ -52,19 +47,18 @@ const vbPlugin = createVbPlugin({
   Tooltip,
 });
 
-// Pinia Instance
 const pinia = createPinia();
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
-// Global Toaster
-import { createToaster } from "@meforma/vue-toaster";
-window.$toast = createToaster({ position: "bottom" });
+const head = createHead(); // 2
 
-// jQuery (Optional)
+import { createToaster } from "@meforma/vue-toaster";
+window.$toast = createToaster({
+  position: "bottom",
+});
 import $ from "jquery";
 window.$ = window.jQuery = $;
 
-// Inertia App
 createInertiaApp({
   title: (title) => `${title} - ${appName}`,
   resolve: (name) =>
@@ -79,8 +73,11 @@ createInertiaApp({
       .use(vbPlugin)
       .use(pinia)
       .component("v-select", vSelect)
-      .provide("setting", setting?.setting || {})
+      .provide("setting", setting?.setting)
+      .use(head) // 3 need important, without this useHead does nothing
       .mount(el);
   },
-  progress: { color: "#E50102" },
+  progress: {
+    color: "#E50102",
+  },
 });
