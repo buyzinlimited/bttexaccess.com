@@ -1,0 +1,68 @@
+# ==============================
+# Robots.txt for BTTEXACCESS.COM
+# Optimized for SEO + Image Sitemap
+# Created by Shakib (whatsApp: +8801405-189365)
+# ==============================
+
+User-agent: *
+Allow: /
+Allow: /storage/uploads/
+Disallow: /search
+Disallow: /cgi-bin/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /orders
+Disallow: /wishlist
+Disallow: /compare
+Disallow: /*?
+Disallow: /*/feed
+Disallow: /*/feed/
+Disallow: /feed
+Disallow: /feed/
+
+# ==============================
+# Sitemaps for better indexing
+# ==============================
+Sitemap: https://bttexaccess.com/sitemap.xml
+Sitemap: https://bttexaccess.com/sitemap_pages.xml
+Sitemap: https://bttexaccess.com/sitemap_main_category.xml
+Sitemap: https://bttexaccess.com/sitemap_sub_category.xml
+Sitemap: https://bttexaccess.com/sitemap_brand.xml
+Sitemap: https://bttexaccess.com/sitemap_light_box_accessories.xml
+Sitemap: https://bttexaccess.com/sitemap_machine_and_spares.xml
+Sitemap: https://bttexaccess.com/sitemap_pantone_color_guide.xml
+Sitemap: https://bttexaccess.com/sitemap_testing_meter_and_tester.xml
+Sitemap: https://bttexaccess.com/sitemap_weight_scale.xml
+Sitemap: https://bttexaccess.com/sitemap_chemical_and_reagent.xml
+Sitemap: https://bttexaccess.com/sitemap_glassware_and_plasticware.xml
+Sitemap: https://bttexaccess.com/sitemap_gsm_cutter_and_spares.xml
+Sitemap: https://bttexaccess.com/sitemap_lab_consumales.xml
+Sitemap: https://bttexaccess.com/sitemap_laboratory_detergent.xml
+Sitemap: https://bttexaccess.com/sitemap_lamp_and_electrical_ballast.xml
+
+Sitemap: https://blog.bttexaccess.com/post-sitemap.xml
+Sitemap: https://blog.bttexaccess.com/page-sitemap.xml
+Sitemap: https://blog.bttexaccess.com/category-sitemap.xml	
+Sitemap: https://blog.bttexaccess.com/post_tag-sitemap.xml
+
+# ==============================
+# Crawling rules for media
+# ==============================
+# Allow image crawling from uploads folder
+User-agent: Googlebot-Image
+Allow: /storage/uploads/
+
+# ==============================
+# Crawl-delay (optional for slow servers)
+# ==============================
+# Crawl-delay: 5
+
+# ==============================
+# End of file
+# ==============================
+
+

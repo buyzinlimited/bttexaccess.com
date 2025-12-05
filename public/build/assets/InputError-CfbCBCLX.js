@@ -1,0 +1,1 @@
+import{l as s,A as t,f as a,o as r,b as o,t as c}from"./app-hhDuPdHH.js";const n={class:"fs-5 primary-color mt-1"},p={__name:"InputError",props:{message:{type:[]}},setup(e){return(i,m)=>s((r(),a("div",null,[o("p",n,c(e.message),1)],512)),[[t,e.message]])}};export{p as _};

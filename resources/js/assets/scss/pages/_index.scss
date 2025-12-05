@@ -1,0 +1,173 @@
+.category {
+    &-section {
+        &-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 20px 5px;
+            position: relative;
+            transition: all ease-in-out 0.4s;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+            &::after {
+                content: '';
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 0;
+                height: 3px;
+                width: 0;
+                background-color: $primary-color;
+                transition: all ease-in-out 0.4s;
+            }
+            &:hover {
+                img {
+                    transform: scale(1.2);
+                    transition: all ease-in-out 0.4s;
+                }
+                &::after {
+                    width: 100%;
+                }
+            }
+            img {
+                transition: all ease-in-out 0.4s;
+                width: 60px;
+                height: 60px
+            }
+            h3 {
+                font-weight: 500;
+                font-size: 13px;
+            }
+        }
+    }
+}
+
+
+.product-filter-section {
+    .links {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        &-item {
+            padding: 10px;
+            display: block;
+            background-color: #fff;
+            color: #000;
+            font-size: 13px;
+            cursor: pointer;
+            border-bottom: 1px solid #000;
+            &:hover {
+                color: #fff;
+                background-color: $primary-color;
+            }
+            &--mejor-home {
+                background-color: #fff;
+
+                &:hover {
+                    color: #fff;
+                    background-color: #000;
+                }
+
+                input[type="radio"]:checked + label {
+                    background: #000;
+                    color: #fff;
+                }
+            }
+        }
+
+        input[type="radio"]:checked + label {
+            background: #000;
+            color: #fff;
+        }
+
+    }
+}
+
+
+.header-links {
+    width: 290px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    z-index: 999;
+    background-color: #fff;
+    &-item {
+        padding: 10px;
+        display: block;
+        background-color: #fff;
+        color: #000;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 400;
+        transition: all 0.3s;
+        .dropDown {
+            position: absolute;
+            top: 0;
+            right: -320px;
+            background-color: #fff;
+            width: 280px;
+            height: 100%;
+            display: none;
+        }
+        &:hover {
+            //color: #fff;
+            background-color: #f2f2f2;
+            .dropDown {
+                transition: all ease-in-out 0.5s;
+                right: -280px;
+                display: block;
+            }
+        }
+    }
+
+    input[type="radio"]:checked + label {
+        background: $primary-color;
+        color: #fff;
+    }
+}
+
+
+//  Home page icon box
+.icon-box {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+    .icon {
+        min-height: 64px;
+        min-width: 64px;
+        border-radius: 999px;
+        background-color: #E7EDEC;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        z-index: 1;
+
+        i {
+            color: $primary-color;
+            font-size: 20px;
+        }
+        svg {
+            width: 24px;
+            height: 24px;
+            fill: $primary-color;
+            color: $primary-color;
+        }
+    }
+    h4 {
+        margin-bottom: 10px !important;
+        color: $primary-color;
+    }
+    p {
+        transition: all 0.5s;
+        font-size: 14px;
+    }
+}
+
+
+.hero-sidebar-height {
+    height: 490px;
+}

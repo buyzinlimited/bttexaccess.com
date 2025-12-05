@@ -1,0 +1,1 @@
+import{_ as o,f as r,o as e,r as s}from"./app-hhDuPdHH.js";const n={},c={class:"button-primary"};function a(t,_){return e(),r("button",c,[s(t.$slots,"default")])}const l=o(n,[["render",a]]);export{l as P};
