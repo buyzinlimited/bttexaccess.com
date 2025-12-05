@@ -94,27 +94,10 @@ class FrontendProductController extends Controller
         $totalRatings = $product->reviews_sum_rating;
         $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
 
-        $jsonLd = [
-            "@context" => "https://schema.org",
-            "@type" => "Product",
-            "name" => $product->name,
-            "image" => $product->image_url,
-            "description" => $product->description,
-            "sku" => $product->sku,
-            "offers" => [
-                "@type" => "Offer",
-                "url" => 'https://schema.org/InStock',
-                "priceCurrency" => "BDT",
-                "price" => $product->price,
-                "availability" => $product->in_stock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-            ],
-        ];
-
         return inertia('Frontend/ProductDetail', [
             'product' => Product::where('slug', $slug)->with('images', 'category', 'brand', 'questions', 'questions.user', 'reviews', 'reviews.user')->first(),
             'ProductAverageRating' => $averageRating,
             'relatedProducts' => $relatedProducts,
-            'jsonLd' => $jsonLd,
         ]);
     }
 

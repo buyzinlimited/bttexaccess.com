@@ -1,29 +1,30 @@
 <?php
 
 
-use App\Http\Controllers\Backend\AboutController;
-use App\Http\Controllers\Backend\AdvertiseController;
-use App\Http\Controllers\Backend\SeoContentController;
-use App\Http\Controllers\Backend\CalibrationController;
-use App\Http\Controllers\Backend\BrandController;
-use App\Http\Controllers\Backend\BusinessSettingController;
-use App\Http\Controllers\Backend\CategoryController;
-use App\Http\Controllers\Backend\SubCategoryController;
-use App\Http\Controllers\Backend\ClientController;
-use App\Http\Controllers\Backend\ContactController;
-use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\Backend\PageController;
-use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\Backend\SettingsController;
-use App\Http\Controllers\Backend\SliderController;
-use App\Http\Controllers\Frontend\FrontendProductController;
-use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\InquiryController;
-use App\Http\Controllers\Frontend\QuestionController;
-use App\Http\Controllers\Frontend\ReviewController;
-
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\PageController;
+use App\Http\Controllers\Backend\AboutController;
+use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Backend\ClientController;
+use App\Http\Controllers\Backend\SliderController;
+use App\Http\Controllers\Backend\ContactController;
+use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Frontend\ReviewController;
+use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\SettingsController;
+use App\Http\Controllers\Frontend\InquiryController;
+use App\Http\Controllers\Backend\AdvertiseController;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Frontend\QuestionController;
+use App\Http\Controllers\Backend\SeoContentController;
+
+use App\Http\Controllers\Backend\CalibrationController;
+use App\Http\Controllers\Backend\SubCategoryController;
+use App\Http\Controllers\Backend\BusinessSettingController;
+use App\Http\Controllers\Frontend\FrontendProductController;
 
 
 /*
@@ -40,12 +41,12 @@ use Illuminate\Support\Facades\Route;
 
 // Frontend Route
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/cache/clear', function(){
-    \Artisan::call('route:clear');
-    \Artisan::call('cache:clear');
-    \Artisan::call('view:clear');
-    \Artisan::call('config:clear');
-    \Artisan::call('optimize');
+Route::get('/cache/clear', function () {
+    Artisan::call('route:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:clear');
+    Artisan::call('optimize');
 
     // Manually clear views if necessary
     $viewsPath = storage_path('framework/views');
@@ -74,9 +75,9 @@ Route::get('/category/{mainCat}/{slug}', [FrontendProductController::class, 'sub
 
 Route::get('/brand/{slug}', [FrontendProductController::class, 'brandProduct']);
 
-Route::get('/contact',[HomeController::class, 'showContactPage']);
-Route::get('/about',[HomeController::class, 'showAboutPage']);
-Route::get('/calibrations',[HomeController::class, 'showCalibrationPage']);
+Route::get('/contact', [HomeController::class, 'showContactPage']);
+Route::get('/about', [HomeController::class, 'showAboutPage']);
+Route::get('/calibrations', [HomeController::class, 'showCalibrationPage']);
 
 Route::get('/get-product-title', [FrontendProductController::class, 'getTitle']);
 Route::get('/get-all-products', [FrontendProductController::class, 'getAllProducts']);
@@ -89,8 +90,7 @@ Route::get('/get-global-setting', [\App\Http\Controllers\Frontend\SettingControl
 
 
 
-Route::middleware('auth')->group(function()
-{
+Route::middleware('auth')->group(function () {
     Route::get('/customer/profile', [ProfileController::class, 'customerProfile']);
     Route::resource('reviews', ReviewController::class);
     Route::resource('questions', QuestionController::class);
@@ -107,7 +107,7 @@ Route::middleware('auth')->group(function () {
 
 
 // Dasshboard Route
-Route::middleware(['auth', 'super.admin'])->group(function() {
+Route::middleware(['auth', 'super.admin'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard/products', [ProductController::class, 'index'])->name('product.all');
@@ -155,7 +155,7 @@ Route::middleware(['auth', 'super.admin'])->group(function() {
 
 
 
-Route::get('/storage', function() {
+Route::get('/storage', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
     dd('linked');
 });
@@ -165,6 +165,4 @@ Route::get('/product-mail', function () {
     return view('emails.product-mail');
 });
 
-require __DIR__.'/auth.php';
-
-
+require __DIR__ . '/auth.php';

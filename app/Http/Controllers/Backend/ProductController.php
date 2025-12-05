@@ -20,40 +20,68 @@ class ProductController extends Controller
     {
         return inertia('Dashboard/Product/Index', [
             'products' => Product::with('category', 'brand', 'images')
-            ->latest()
-            ->get()
+                ->latest()
+                ->get()
         ]);
     }
     public function addProduct()
     {
         return inertia('Dashboard/Product/Add', [
-                'categories' => Category::query()->select('id', 'name','id')->with('subCategories')->get(),
-                'brands' => Brand::query()->select('id', 'name')->get(),
-                'sub_categories' => SubCategory::query()->select('id', 'name')->get()
-            ]);
+            'categories' => Category::query()->select('id', 'name', 'id')->with('subCategories')->get(),
+            'brands' => Brand::query()->select('id', 'name')->get(),
+            'sub_categories' => SubCategory::query()->select('id', 'name')->get()
+        ]);
     }
-    
+
     public function storeProduct(ProductRequest $req)
     {
 
         $data = $req->validated();
         $data['user_id'] = Auth::id();
+
+        // Create product
         $product = Product::query()->create($data);
-        
-        //  save product images
+
+        // Check if images exist and are array
         $images = $data['images'];
         $imageData = [];
-        foreach( $images as $image){
+
+        foreach ($images as $image) {
+            // Get original filename
+            $originalName = $image['file']->getClientOriginalName();
+            $clientName   = pathinfo($originalName, PATHINFO_FILENAME);
+
+            // Replace spaces
+            $clientName = str_replace(' ', '_', $clientName);
+
+            $extension    = $image['file']->getClientOriginalExtension();
+            // Final filename
+            $filename = $clientName . '_' . $product->id . '.' . $extension;
+
             $imageData[] = [
-                'url' => '/storage/'.$image['file']->store('uploads', 'public'),
+                'url' => '/storage/' . $image['file']->storeAs('uploads', $filename, 'public'),
                 'product_id' => $product->id
             ];
         }
+
+        // insert images
         Image::insert($imageData);
+
+        //  save product images
+        // $images = $data['images'];
+        // $imageData = [];
+        // foreach ($images as $image) {
+        //     $imageData[] = [
+        //         'url' => '/storage/' . $image['file']->store('uploads', 'public'),
+        //         'product_id' => $product->id
+        //     ];
+        // }
+        // Image::insert($imageData);
         // event(new LatestProduct($product));
 
         return to_route('product.all');
     }
+
     public function editProduct($slug)
     {
         return inertia('Dashboard/Product/Edit', [
@@ -64,51 +92,65 @@ class ProductController extends Controller
         ]);
     }
 
-    public function deleteProductImage($id) {
+    public function deleteProductImage($id)
+    {
         $image = Image::where('id', $id)->first();
         $imagePath = str_replace('/storage', 'public', $image->url);
         Storage::delete($imagePath);
         $image->delete();
     }
     public function updateProduct($slug)
-{
-    $product = Product::where('slug', $slug)->firstOrFail();
+    {
+        $product = Product::where('slug', $slug)->firstOrFail();
 
-    $data = Request::all();
-    $data['user_id'] = Auth::id();
+        $data = Request::all();
+        $data['user_id'] = Auth::id();
 
-    // If slug is provided and it's different from current, check for duplicates
-    if (isset($data['slug']) && $data['slug'] !== $product->slug) {
-        $exists = Product::where('slug', $data['slug'])
-            ->where('id', '!=', $product->id)
-            ->exists();
+        // If slug is provided and it's different from current, check for duplicates
+        if (isset($data['slug']) && $data['slug'] !== $product->slug) {
+            $exists = Product::where('slug', $data['slug'])
+                ->where('id', '!=', $product->id)
+                ->exists();
 
-        if ($exists) {
-            return back()->withErrors(['slug' => 'This slug is already in use.']);
+            if ($exists) {
+                return back()->withErrors(['slug' => 'This slug is already in use.']);
+            }
+        } else {
+            // If slug is not provided, keep the old slug
+            $data['slug'] = $product->slug;
         }
-    } else {
-        // If slug is not provided, keep the old slug
-        $data['slug'] = $product->slug;
+
+        // Handle image upload
+        if (!empty($data['newImage'])) {
+            $images = $data['newImage'];
+            $imageData = [];
+            foreach ($images as $image) {
+                // Get original filename
+                $originalName = $image['file']->getClientOriginalName();
+                $clientName   = pathinfo($originalName, PATHINFO_FILENAME);
+
+                // Replace spaces
+                $clientName = str_replace(' ', '_', $clientName);
+
+                $extension    = $image['file']->getClientOriginalExtension();
+                // Final filename
+                $filename = $clientName . '_' . $product->id . '.' . $extension;
+
+                $imageData[] = [
+                    'url' => '/storage/' . $image['file']->storeAs('uploads', $filename, 'public'),
+                    'product_id' => $product->id
+                ];
+            }
+            Image::insert($imageData);
+        }
+
+        $product->update($data);
+
+        return to_route('product.all');
     }
 
-    // Handle image upload
-    if (!empty($data['newImage'])) {
-        $images = $data['newImage'];
-        $imageData = [];
-        foreach ($images as $image) {
-            $imageData[] = [
-                'url' => '/storage/' . $image['file']->store('uploads', 'public'),
-                'product_id' => $product->id
-            ];
-        }
-        Image::insert($imageData);
-    }
-
-    $product->update($data);
-    return to_route('product.all');
-}
-
-    public function deleteProduct($id){
+    public function deleteProduct($id)
+    {
         $product = Product::where('id', $id)->first();
         if ($product) {
             $images = $product->images;
